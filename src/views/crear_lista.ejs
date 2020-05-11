@@ -1,0 +1,213 @@
+<%- include('block_inicio') %>
+<%- include('barra_menu') %>
+<div class="container">
+    <br><br>
+    <div class="row d-flex justify-content-center" >
+      <h2>CREAR LISTA</h2>
+    </div>
+
+    <br><br>
+    <div class="bt row" style="height: auto;">
+      <i id="btnNuevaLista" class="far fa-plus-square fa-2x" style="color: green; cursor: pointer;"></i>
+      <p class="mt-1 ml-1" id="lista"></p>
+    </div>
+
+    <div class=" bt row d-flex justify-content-center">
+      <div class="col-9 bt">
+        <table id="example" class="table table-bordered" style="text-align: center;">
+          <thead>
+            <tr style="background: rgb(207, 204, 204);">
+              <th>ID</th>
+              <th>PRODUCTO</th>
+              <th>MARCA</th>
+              <th>NOMBRE</th>
+              <th>PRECIO</th>
+              <th>ACCION</th>
+              </th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="bt col-3 d-flex flex-column align-items-center" style="background: rgb(184, 182, 182);padding: 2%; border-radius: 15px;">
+        
+        <div class="form-group mt-2" style="width: 70%">
+          <select class="form-control" id="select1">
+              <option selected>Producto...</option>
+            <% sel_product.forEach(e => { %>
+                <option value="<%=e._id%>">
+                   <%=e.product%>
+                </option>
+            <%})%>
+          </select>
+        </div>
+
+        <div class="form-group mt-4" style="width: 70%">
+          <select class="form-control" id="select2">
+              <option selected>Marca...</option>
+              <% sel_mark.forEach(e => { %>
+                <option value="<%=e._id%>">
+                   <%=e.mark%>
+                </option>
+            <%})%>
+          </select>
+        </div>
+
+        <input type="text" class="form-control mt-4" placeholder="nombre comercial" id="name" autocomplete="off" style="width: 70%;">
+
+        <div class="d-flex justify-content-center align-items-center">
+            <h4 style="margin-top: 16%; margin-right: 2%;">$</h4>
+            <input type="text" class="form-control mt-4" placeholder="precio" id="price" autocomplete="off" style="width: 35%;">
+        </div>
+          
+        <button id="btn" class="btn btn-primary mt-5" style="width: 70%;">CARGAR</button>
+
+
+
+
+
+
+
+
+
+      </div>
+    </div>
+
+
+
+</div>
+
+<br><br>
+<%- include('block_end') %>
+
+
+<style>
+  .link-trash:hover{
+    color: rgb(196, 31, 31);
+  }
+</style>
+
+<script>
+let name = document.getElementById('name')
+let price = document.getElementById('price')
+let btnCargar = document.getElementById('btn')
+let pin = sessionStorage.getItem('pin')
+let btnNuevaLista = document.getElementById('btnNuevaLista')
+let lista = document.getElementById('lista')
+let tbody = document.getElementById('tbody')
+var nombreLista;
+//var idTabla;
+
+
+btnNuevaLista.onclick = () => {
+  nombreLista = prompt('INGRESE EL NOMBRE DE LA LISTA').toLocaleUpperCase()
+  if(nombreLista === ''){alert('ATENCION: DEBE SELECCINAR UN NOMBRE PARA LA LISTA');return false}
+  lista.innerHTML = 'LISTA: '+ nombreLista
+}//end btn
+
+
+
+ 
+ //Array
+ var array = []
+ var c = 1
+
+btnCargar.onclick = () => {
+  //Control de nombre de lista
+  if(nombreLista === undefined){
+    alert('Error: Debe Ingresar un Nombre a la Lista...')
+    return false
+  }
+
+  //Controla los select
+  if ($("#select1 option:selected").val() == 'Producto...') {alert('Error: Debe Seleccionar un Producto...'); return false}
+  if ($("#select2 option:selected").val() == 'Marca...') {alert('Error: Debe Seleccionar una Marca...'); return false}
+
+  //Controla los inputs
+  if(!FrontValidate.input('name',['presence',{min:2},{max:40}],'windows')){
+    if(!FrontValidate.input('price',['presence','no_space','no_letters','NO_LETTERS',{max:6}],'windows')){
+      
+      //Creo la tabla
+      let fila = document.createElement('tr')
+      let celda = document.createElement('td')
+      let celda2 = document.createElement('td')
+      let celda3 = document.createElement('td')
+      let celda4 = document.createElement('td')
+      let celda5 = document.createElement('td')
+      let celda6 = document.createElement('td')
+      let icono = document.createElement('i')
+      let atr = document.createAttribute("atr")
+
+      
+      c = c++
+      array.push({id:c, 
+      producto:$("#select1 option:selected").val(),
+      producto_name:$("#select1 option:selected").text().trim(),
+      marca:$("#select2 option:selected").val(),
+      marca_name:$("#select2 option:selected").text().trim(),
+      nombre:name.value, 
+      precio:price.value})
+
+      //$('#tbody tr').remove()
+      console.log(array.length)
+      array.forEach(e => {
+        tbody.innerHTML= `<tr> 
+        <td> ${e.id} </td> 
+        <td> ${e.producto_name} </td>
+        <td>${e.marca_name}</td>
+        <td>${e.nombre}</td>
+        <td>${e.precio}</td>
+        <td> 
+          <i class="fas fa-trash-alt fa-lg link-trash" atr="${e.id}"></i>
+        </td>
+        </tr>`
+      })//end for
+      //Creo la tabla con los datos
+      
+      /*array.forEach(e => {
+        tbody.appendChild(fila)
+        fila.appendChild(celda).innerHTML = e.id
+        fila.appendChild(celda2).innerHTML = e.producto_name
+        fila.appendChild(celda3).innerHTML = e.marca_name
+        fila.appendChild(celda4).innerHTML = e.nombre
+        fila.appendChild(celda5).innerHTML = '$ '+ e.precio
+        fila.appendChild(celda6).appendChild(icono)
+        icono.setAttribute('class', 'fas fa-trash-alt fa-lg deleteDep link-trash')
+        icono.setAttribute('atr', e.id)
+      })//end for*/
+
+      //alert($("#select1 option:selected").text().trim())
+      /*Obj.ajaxConfigMsg('POST', '/crearProducto',
+      {producto:$("#select1 option:selected").val(),
+      marca:$("#select2 option:selected").val(), 
+      nombre:name.value, precio:price.value}, 'La Creacion Fue Exitosa...', 
+      [{code:401,msg:'Tipo de Datos Incorrecto...'}])*/
+    
+    }else{
+      window.location.reload()
+    }//end if
+  }else{
+    window.location.reload()
+  }//end if2*/
+}//end btn
+
+
+$('#example tbody').on( 'click', '.fa-trash-alt', function () {
+    let idTabla = $(this).parents("tr").find("td").eq(0).text()
+
+    //let result = Obj.deleteValueInObjectArray(array,'id', idTabla)
+    //array.splice(result,1)
+    alert(idTabla)
+    
+})
+
+
+
+
+
+
+  
+</script>

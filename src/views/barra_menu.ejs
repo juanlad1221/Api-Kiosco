@@ -1,0 +1,73 @@
+<!--NavBar-->
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light" style="background:#3F51B5 !important;height:10% !important">
+  <a class="navbar-brand" href="#" style="color:white;margin-left: 7%;font-size: 20px;">SYSKIOS</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav ml-auto" style="margin-right: 20%;">
+      <li class="nav-item dropdown active">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color:white">
+        <%=user%>
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="/logout">Cerrar Sesion</a>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+  <a class="p-2 icono" id="showRightPush" style="color:white;margin-top:0%;margin-right:1%">
+    <i class="fa fa-bars fa-lg" style="font-size:150%"></i>
+  </a>
+
+</nav>
+
+<!--Menu lateral-->
+<nav class="cbp-spmenu cbp-spmenu-vertical cbp-spmenu-right" id="cbp-spmenu-s2">
+    <!--Titulo Menu-->
+    <div class="d-flex justify-content-center align-items-center" style="background:#424242;height:10%">
+        <h3 class="p-2 white font-2 size30">Menu</h3>
+    </div>
+    <!--Info User-->
+    <div class="d-flex flex-column align-items-center">
+         <img src="/img/girl.png" alt="user-image" class="rounded-circle mt-3"
+         style="width:25%;">
+         <h3 style="color:grey" class="font-2 mt-3"></h3>
+         <a href="">SEM Nativa 1.0</a>
+    </div>
+         
+    
+    <!--Acordeon-->
+    <ul id="accordion" class="accordion font-1">
+      <li>
+        <a id="link_home" href="/home" class="link" style="text-decoration: none;">HOME</a>
+      </li>
+      <li>
+        <div class="link">LISTAS<i class="fa fa-chevron-down"></i></div>
+        <ul class="submenu">
+          <li><a href="/crearLista">Crear Lista</a></li>
+          <li><a href="/editarLista">Editar Lista</a></li>
+          <li><a href="/altaBajaLista">Alta/Baja Lista</a></li>
+        </ul>
+      </li>
+      <li>
+        <a id="link_home" href="/home" class="link" style="text-decoration: none;">CONFIGURACÓN</a>
+      </li>
+      
+    </ul><!--end ul-->
+</nav>
+
+<script>
+  var menuRight = document.getElementById( 'cbp-spmenu-s2' )
+var showRightPush = document.getElementById( 'showRightPush' )
+var body = document.body;
+
+showRightPush.onclick = function() {
+  classie.toggle( this, 'active' );
+  classie.toggle( body, 'cbp-spmenu-push-toleft' );
+  classie.toggle( menuRight, 'cbp-spmenu-open' );
+}
+</script>
